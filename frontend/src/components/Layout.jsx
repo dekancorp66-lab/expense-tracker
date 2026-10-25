@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { ChartNoAxesCombined, CreditCard, LayoutDashboard, LogOut, Menu, ReceiptText, X } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import './Layout.css'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: '◫' },
-  { to: '/transactions', label: 'Payments', icon: '◧' },
-  { to: '/budgets', label: 'Transactions', icon: '◩' },
-  { to: '/reports', label: 'Reports', icon: '◭' },
+  { to: '/', label: 'Dashboard', Icon: LayoutDashboard },
+  { to: '/transactions', label: 'Transactions', Icon: ReceiptText },
+  { to: '/budgets', label: 'Budgets', Icon: CreditCard },
+  { to: '/reports', label: 'Reports', Icon: ChartNoAxesCombined },
 ]
 
 export default function Layout() {
@@ -32,7 +33,7 @@ export default function Layout() {
             </div>
             <span className="brand-name">COINEST</span>
           </div>
-          <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button>
+          <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={19} /></button>
         </div>
 
         <nav className="sidebar-nav" aria-label="Sidebar navigation">
@@ -43,22 +44,19 @@ export default function Layout() {
               end={item.to === '/'}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
               onClick={() => setMenuOpen(false)}
+              title={item.label}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon"><item.Icon size={19} strokeWidth={1.8} /></span>
               <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
 
         <div className="sidebar-footer">
-          <div className="promo-card">
-            <div className="promo-icon">◎</div>
-            <div className="promo-text">
-              <strong>Get Pro</strong>
-              <span>Unlock finance insights and analytics</span>
-            </div>
-          </div>
-          <button className="logout-button" onClick={handleLogout}>Get Pro</button>
+          <button className="logout-button" onClick={handleLogout} title="Log out">
+            <LogOut size={18} strokeWidth={1.8} />
+            <span>Log out</span>
+          </button>
         </div>
       </aside>
 
@@ -66,22 +64,12 @@ export default function Layout() {
 
       <main className="main-content">
         <header className="topbar">
-          <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Open menu">☰</button>
-
-          <div className="toolbar-search">
-            <span className="search-icon">⌕</span>
-            <input type="text" value="Search placeholder" readOnly aria-label="Search" />
-          </div>
-
-          <div className="toolbar-actions">
-            <button className="toolbar-btn" aria-label="Search">⌕</button>
-            <button className="toolbar-btn" aria-label="Notifications">◌</button>
-            <button className="toolbar-btn" aria-label="Profile">◉</button>
-          </div>
+          <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Open menu"><Menu size={21} /></button>
+          <div className="topbar-brand">COINEST <span>PERSONAL FINANCE</span></div>
 
           <div className="profile-pill">
             <div className="profile-avatar">{(user?.full_name || user?.username || 'A')[0].toUpperCase()}</div>
-            <div className="profile-name">{user?.full_name || 'Andrew Forbist'}</div>
+            <div className="profile-name">{user?.full_name || user?.username || 'Account'}</div>
           </div>
         </header>
 

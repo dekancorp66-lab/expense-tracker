@@ -838,3 +838,204 @@
     min-width: 560px;
   }
 }
+
+.dashboard-page {
+  gap: 1.1rem;
+}
+
+.dashboard-heading {
+  min-height: 112px;
+  align-items: flex-end;
+  padding: 0.25rem 0.2rem 0.15rem;
+}
+
+.dashboard-heading h1 {
+  color: #f6f3e8;
+  font-size: 1.8rem;
+  font-weight: 650;
+}
+
+.dashboard-heading p {
+  color: rgba(246, 243, 232, 0.74);
+}
+
+.dashboard-heading .dashboard-eyebrow {
+  margin: 0 0 0.45rem;
+  color: #c2d5bd;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.dashboard-add-link {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 11px;
+  color: #f6f3e8;
+  background: rgba(246, 243, 232, 0.13);
+  backdrop-filter: blur(12px);
+}
+
+.dashboard-summary {
+  gap: 0.8rem;
+}
+
+.summary-card {
+  position: relative;
+  min-height: 118px;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.48);
+  background: rgba(246, 244, 235, 0.79);
+}
+
+.summary-card span {
+  position: relative;
+  z-index: 1;
+}
+
+.summary-card strong {
+  position: relative;
+  z-index: 1;
+  font-size: 1.45rem;
+}
+
+.summary-card > i {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.45rem;
+  color: rgba(44, 85, 62, 0.12);
+  font-size: 3rem;
+  font-style: normal;
+  line-height: 1;
+}
+
+.summary-card.income-summary {
+  background: linear-gradient(145deg, rgba(26, 103, 77, 0.96), rgba(55, 137, 100, 0.92));
+}
+
+.summary-card.income-summary span,
+.summary-card.income-summary strong {
+  color: #fffdf4;
+}
+
+.summary-card.income-summary > i {
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.summary-card.expense-summary > i {
+  color: rgba(183, 91, 60, 0.16);
+}
+
+.summary-card.savings-summary {
+  background: rgba(218, 231, 215, 0.88);
+}
+
+.dashboard-content {
+  grid-template-columns: minmax(0, 1.75fr) minmax(270px, 0.9fr);
+  gap: 0.85rem;
+}
+
+.dashboard-main-column,
+.dashboard-side-column {
+  gap: 0.85rem;
+}
+
+.dashboard-side-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-panel {
+  border-color: rgba(255, 255, 255, 0.56);
+  background: rgba(247, 245, 237, 0.78);
+  box-shadow: 0 14px 34px rgba(22, 29, 23, 0.12);
+}
+
+.panel-header-row {
+  margin-bottom: 0.85rem;
+}
+
+.monthly-chart {
+  height: 200px;
+}
+
+.monthly-bars {
+  border-color: rgba(90, 104, 91, 0.2);
+}
+
+.income-bar {
+  background: #25835f;
+}
+
+.expense-bar {
+  background: #c27b55;
+}
+
+.table-wrap th,
+.table-wrap td {
+  border-color: rgba(73, 88, 75, 0.12);
+}
+
+.category-list {
+  gap: 1rem;
+}
+
+.category-track {
+  background: rgba(63, 83, 69, 0.12);
+}
+
+.category-track span {
+  background: linear-gradient(90deg, #267454, #6ca77d);
+}
+
+.category-track .budget-progress.approaching {
+  background: #b8753f;
+}
+
+.category-track .budget-progress.exceeded {
+  background: #ba5947;
+}
+
+.budget-row small {
+  font-size: 0.72rem;
+}
+
+@media (max-width: 700px) {
+  .dashboard-heading {
+    min-height: 0;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .dashboard-heading h1 {
+    font-size: 1.45rem;
+  }
+
+  .dashboard-add-link {
+    white-space: nowrap;
+    font-size: 0.72rem;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summary-card {
+    min-height: 104px;
+  }
+
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 440px) {
+  .dashboard-heading {
+    flex-direction: column;
+  }
+
+  .summary-card strong {
+    font-size: 1.25rem;
+  }
+}

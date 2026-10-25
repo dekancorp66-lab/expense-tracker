@@ -1,23 +1,23 @@
 :root {
-  --bg-page: #eaf1ea;
-  --bg-panel: #f5f8f5;
-  --bg-panel-strong: #edf5ef;
-  --bg-sidebar: #edf3ee;
-  --surface: #fbfcfb;
-  --surface-2: #f2f6f1;
-  --line: #dfe7dd;
-  --text: #1e2b2a;
-  --text-soft: #667a73;
-  --text-faint: #9aa7a1;
-  --green-dark: #1d6b57;
-  --green-mid: #7bbf9d;
-  --green-soft: #dff0e6;
-  --green-soft-2: #cce9d9;
+  --bg-page: #303831;
+  --bg-panel: rgba(245, 243, 233, 0.76);
+  --bg-panel-strong: rgba(249, 247, 239, 0.9);
+  --bg-sidebar: rgba(24, 31, 28, 0.88);
+  --surface: rgba(249, 247, 239, 0.84);
+  --surface-2: rgba(226, 231, 218, 0.72);
+  --line: rgba(255, 255, 255, 0.38);
+  --text: #202a25;
+  --text-soft: #66736b;
+  --text-faint: #879187;
+  --green-dark: #246d55;
+  --green-mid: #89b99a;
+  --green-soft: #dce9dc;
+  --green-soft-2: #c6dfcc;
   --green-accent: #3e946d;
   --green-strong: #285d49;
-  --shadow: 0 12px 30px rgba(35, 68, 52, 0.08);
-  --radius: 22px;
-  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --shadow: 0 18px 44px rgba(20, 28, 23, 0.14);
+  --radius: 16px;
+  --font: 'Aptos', 'Segoe UI', sans-serif;
 }
 
 *, *::before, *::after {
@@ -33,7 +33,12 @@ html {
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg-page);
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse at 78% 18%, rgba(188, 146, 91, 0.42), transparent 38%),
+    radial-gradient(ellipse at 18% 74%, rgba(99, 127, 100, 0.5), transparent 44%),
+    linear-gradient(125deg, #2d3631 0%, #535344 48%, #343c36 100%);
+  background-attachment: fixed;
   color: var(--text);
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
@@ -64,10 +69,11 @@ a {
 }
 
 .card {
-  background: rgba(255,255,255,0.32);
-  border: 1px solid var(--line);
+  background: rgba(246, 244, 235, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(22px) saturate(1.1);
 }
 
 .loading,

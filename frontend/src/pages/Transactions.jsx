@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { transactionsAPI, categoriesAPI } from '../api/client'
+import './DataPages.css'
 import './Transactions.css'
 
 function formatMoney(n) {
@@ -121,15 +123,37 @@ export default function Transactions() {
 
   return (
     <div className="transactions-page">
-      <div className="page-header">
-        <h2>Transactions</h2>
-        <button className="btn btn-primary" onClick={openCreate}>+ Add</button>
-      </div>
+      <header className="page-heading">
+        <div>
+          <p className="page-eyebrow">ACCOUNT ACTIVITY</p>
+          <h1>Transactions</h1>
+          <p className="page-description">Review and manage your income and expenses.</p>
+        </div>
+        <button className="btn btn-primary" onClick={openCreate}><Plus size={17} /> Add transaction</button>
+      </header>
+
+      <section className="data-metrics" aria-label="Transaction totals">
+        <article className="data-metric card">
+          <span>Visible records</span>
+          <strong>{txns.length}</strong>
+          <small>Matching your current filters</small>
+        </article>
+        <article className="data-metric card income-metric">
+          <span>Visible income</span>
+          <strong>{formatMoney(txns.filter((item) => item.type === 'income').reduce((sum, item) => sum + Number(item.amount), 0))}</strong>
+          <small>From loaded transactions</small>
+        </article>
+        <article className="data-metric card expense-metric">
+          <span>Visible expenses</span>
+          <strong>{formatMoney(txns.filter((item) => item.type === 'expense').reduce((sum, item) => sum + Number(item.amount), 0))}</strong>
+          <small>From loaded transactions</small>
+        </article>
+      </section>
 
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
-      <div className="filters card">
+      <div className="filters data-toolbar card">
         <div className="filter-row">
           <input
             type="text"
@@ -244,8 +268,8 @@ export default function Transactions() {
                   </td>
                   <td className="hide-mobile">{t.payment_method || '—'}</td>
                   <td>
-                    <button className="btn btn-ghost btn-sm" onClick={() => openEdit(t)}>Edit</button>
-                    <button className="btn btn-ghost btn-sm" onClick={() => setConfirmDelete(t.id)} style={{ color: 'var(--danger)' }}>Delete</button>
+                    <button className="icon-action" onClick={() => openEdit(t)} aria-label={`Edit ${t.description}`} title="Edit"><Pencil size={16} /></button>
+                    <button className="icon-action danger-action" onClick={() => setConfirmDelete(t.id)} aria-label={`Delete ${t.description}`} title="Delete"><Trash2 size={16} /></button>
                   </td>
                 </tr>
               ))}

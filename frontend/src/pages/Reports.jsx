@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { Download } from 'lucide-react'
 import { reportsAPI } from '../api/client'
+import './DataPages.css'
 
-const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16']
+const COLORS = ['#267454', '#c27b55', '#759a70', '#c5a15c', '#4f8290', '#bd766e', '#8e9970', '#657b69']
 
 function formatMoney(n) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(n) || 0)
@@ -59,75 +61,71 @@ export default function Reports() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <h2 style={{ fontSize: '1.5rem' }}>Reports</h2>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <input type="date" value={start} onChange={(e) => setStart(e.target.value)} style={{ padding: '0.5rem', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }} />
-          <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} style={{ padding: '0.5rem', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }} />
-          <button className="btn btn-ghost" onClick={handleExport}>Export CSV</button>
-        </div>
-      </div>
-
-      {error && <div className="alert alert-error">{error}</div>}
-      {loading ? (
-        <div className="loading"><div className="spinner" /></div>
-      ) : summary && (
-        <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div className="card">
-              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Income</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--income)' }}>{formatMoney(summary.total_income)}</div>
-            </div>
-            <div className="card">
-              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Expenses</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--expense)' }}>{formatMoney(summary.total_expense)}</div>
-            </div>
-            <div className="card">
-              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Balance</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{formatMoney(summary.balance)}</div>
-            </div>
-            <div className="card">
-              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Savings Rate</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{summary.savings_rate}%</div>
-            </div>
-            <div className="card">
-              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Transactions</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{summary.transaction_count}</div>
-            </div>
+      <main className="report-page">
+        <header className="page-heading">
+          <div>
+            <p className="page-eyebrow">YOUR NUMBERS, CLEARLY</p>
+            <h1>Reports</h1>
+            <p className="page-description">Track cash flow and spending patterns over time.</p>
           </div>
+          <div className="report-toolbar">
+            <input aria-label="Report start date" type="date" value={start} onChange={(e) => setStart(e.target.value)} />
+            <input aria-label="Report end date" type="date" value={end} onChange={(e) => setEnd(e.target.value)} />
+            <button className="btn btn-primary" onClick={handleExport}><Download size={16} /> Export CSV</button>
+          </div>
+        </header>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div className="card">
-              <h3 style={{ marginBottom: '1rem' }}>Monthly Trend</h3>
-              <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={monthly}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2d3a4f" />
-                  <XAxis dataKey="name" stroke="#8b9cb3" fontSize={12} />
-                  <YAxis stroke="#8b9cb3" fontSize={12} />
-                  <Tooltip contentStyle={{ background: '#1a2332', border: '1px solid #2d3a4f' }} />
-                  <Bar dataKey="Income" fill="#22c55e" />
-                  <Bar dataKey="Expenses" fill="#ef4444" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="card">
-              <h3 style={{ marginBottom: '1rem' }}>Category Breakdown</h3>
-              {pieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={240}>
-                  <PieChart>
-                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80}>
-                      {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                    </Pie>
-                    <Tooltip contentStyle={{ background: '#1a2332', border: '1px solid #2d3a4f' }} formatter={(v) => formatMoney(v)} />
-                  </PieChart>
+        {error && <div className="alert alert-error">{error}</div>}
+        {loading ? (
+          <div className="loading"><div className="spinner" /></div>
+        ) : summary && (
+          <>
+            <section className="report-summary" aria-label="Report summary">
+              <article className="report-metric income"><span>Income</span><strong>{formatMoney(summary.total_income)}</strong></article>
+              <article className="report-metric expenses"><span>Expenses</span><strong>{formatMoney(summary.total_expense)}</strong></article>
+              <article className="report-metric"><span>Net balance</span><strong>{formatMoney(summary.balance)}</strong></article>
+              <article className="report-metric"><span>Savings rate</span><strong>{summary.savings_rate}%</strong></article>
+              <article className="report-metric"><span>Transactions</span><strong>{summary.transaction_count}</strong></article>
+            </section>
+
+            <section className="report-charts">
+              <article className="report-panel">
+                <h2>Monthly trend</h2>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={monthly} margin={{ top: 8, right: 8, left: -15, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(63, 83, 69, 0.12)" />
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} fontSize={11} />
+                    <YAxis tickLine={false} axisLine={false} fontSize={11} />
+                    <Tooltip
+                      contentStyle={{ background: 'rgba(250, 248, 240, 0.97)', border: '1px solid rgba(60, 82, 67, 0.14)', borderRadius: 9, color: '#202a25' }}
+                      formatter={(value) => formatMoney(value)}
+                    />
+                    <Bar dataKey="Income" fill="#267454" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Expenses" fill="#c27b55" radius={[4, 4, 0, 0]} />
+                  </BarChart>
                 </ResponsiveContainer>
-              ) : <div className="empty-state"><p>No expense data</p></div>}
-            </div>
-          </div>
+              </article>
+              <article className="report-panel">
+                <h2>Expense categories</h2>
+                {pieData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <PieChart>
+                      <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={54} outerRadius={88} paddingAngle={2}>
+                        {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="rgba(247,245,237,0.9)" />)}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{ background: 'rgba(250, 248, 240, 0.97)', border: '1px solid rgba(60, 82, 67, 0.14)', borderRadius: 9, color: '#202a25' }}
+                        formatter={(value) => formatMoney(value)}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : <div className="empty-state"><p>No expense data for this period.</p></div>}
+              </article>
+            </section>
 
-          {summary.category_breakdown?.length > 0 && (
-            <div className="card table-wrap">
-              <h3 style={{ marginBottom: '1rem' }}>Category Details</h3>
+            {summary.category_breakdown?.length > 0 && (
+              <section className="report-table table-wrap">
+                <h2>Category details</h2>
               <table>
                 <thead>
                   <tr>
@@ -147,11 +145,12 @@ export default function Reports() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
-          )}
-        </>
-      )}
+                </table>
+              </section>
+            )}
+          </>
+        )}
+      </main>
     </div>
   )
 }

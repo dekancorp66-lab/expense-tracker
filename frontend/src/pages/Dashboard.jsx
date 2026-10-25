@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { reportsAPI, transactionsAPI } from '../api/client'
+import { budgetsAPI, reportsAPI, transactionsAPI } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import './Dashboard.css'
 
@@ -18,6 +18,7 @@ export default function Dashboard() {
   const { user } = useAuth()
   const [summary, setSummary] = useState(null)
   const [transactions, setTransactions] = useState([])
+  const [budgets, setBudgets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -28,13 +29,16 @@ export default function Dashboard() {
       setLoading(true)
       setError('')
       try {
-        const [summaryResponse, transactionsResponse] = await Promise.all([
+        const today = new Date()
+        const [summaryResponse, transactionsResponse, budgetsResponse] = await Promise.all([
           reportsAPI.summary(),
           transactionsAPI.list({ limit: 5 }),
+          budgetsAPI.progress({ month: today.getMonth() + 1, year: today.getFullYear() }),
         ])
         if (active) {
           setSummary(summaryResponse.data)
           setTransactions(transactionsResponse.data)
+          setBudgets(budgetsResponse.data)
         }
       } catch (err) {
         if (active) setError(err.response?.data?.detail || 'Could not load your dashboard.')
@@ -53,13 +57,17 @@ export default function Dashboard() {
     ...monthly.flatMap((item) => [Number(item.total_income), Number(item.total_expense)]),
   )
   const categories = summary?.category_breakdown || []
+  const greeting = new Date().getHours() < 12
+    ? 'Good morning'
+    : new Date().getHours() < 18 ? 'Good afternoon' : 'Good evening'
 
   return (
     <main className="dashboard-page">
       <header className="dashboard-heading">
         <div>
-          <h1>Good to see you, {user?.full_name || user?.username || 'there'}</h1>
-          <p>Your finances for this month</p>
+          <p className="dashboard-eyebrow">PERSONAL FINANCE OVERVIEW</p>
+          <h1>{greeting}, {user?.full_name || user?.username || 'there'}</h1>
+          <p>A clear view of your money this month.</p>
         </div>
         <Link className="dashboard-add-link" to="/transactions">Manage transactions</Link>
       </header>
@@ -71,21 +79,25 @@ export default function Dashboard() {
       ) : summary && (
         <>
           <section className="dashboard-summary" aria-label="Monthly summary">
-            <article className="summary-card card">
+            <article className="summary-card income-summary card">
               <span>Income</span>
               <strong>{formatMoney(summary.total_income)}</strong>
+              <i aria-hidden="true">↗</i>
             </article>
-            <article className="summary-card card">
+            <article className="summary-card expense-summary card">
               <span>Expenses</span>
               <strong>{formatMoney(summary.total_expense)}</strong>
+              <i aria-hidden="true">↘</i>
             </article>
-            <article className="summary-card card">
+            <article className="summary-card savings-summary card">
               <span>Net balance</span>
               <strong>{formatMoney(summary.balance)}</strong>
+              <i aria-hidden="true">◈</i>
             </article>
-            <article className="summary-card card">
+            <article className="summary-card count-summary card">
               <span>Transactions</span>
               <strong>{summary.transaction_count}</strong>
+              <i aria-hidden="true">▤</i>
             </article>
           </section>
 
@@ -159,27 +171,60 @@ export default function Dashboard() {
               </article>
             </div>
 
-            <article className="dashboard-panel category-panel card">
-              <div className="panel-header-row"><span>Expense categories</span></div>
-              {categories.length ? (
-                <div className="category-list">
-                  {categories.map((category) => (
-                    <div className="category-row" key={category.category_id ?? category.category_name}>
-                      <div className="category-row-label">
-                        <span>{category.category_name}</span>
-                        <strong>{formatMoney(category.total)}</strong>
-                      </div>
-                      <div className="category-track">
-                        <span style={{ width: `${Math.min(100, Number(category.percentage))}%` }} />
-                      </div>
-                      <small>{category.percentage}% of expenses</small>
-                    </div>
-                  ))}
+            <aside className="dashboard-side-column">
+              <article className="dashboard-panel card">
+                <div className="panel-header-row">
+                  <span>Monthly spending limits</span>
+                  <Link to="/budgets">Manage</Link>
                 </div>
-              ) : (
-                <p className="dashboard-empty">Expense categories will appear here when you record an expense.</p>
-              )}
-            </article>
+                {budgets.length ? (
+                  <div className="category-list">
+                    {budgets.map((budget) => (
+                      <div className="category-row budget-row" key={budget.budget_id}>
+                        <div className="category-row-label">
+                          <span>{budget.category_name}</span>
+                          <strong>{Math.round(Number(budget.percentage))}%</strong>
+                        </div>
+                        <div className="category-track">
+                          <span
+                            className={`budget-progress ${budget.status}`}
+                            style={{ width: `${Math.min(100, Math.max(0, Number(budget.percentage)))}%` }}
+                          />
+                        </div>
+                        <small>{formatMoney(budget.spent)} spent of {formatMoney(budget.budget_amount)}</small>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="dashboard-empty">
+                    No spending limits yet.<br />
+                    <Link to="/budgets">Set a monthly budget</Link>
+                  </p>
+                )}
+              </article>
+
+              <article className="dashboard-panel card">
+                <div className="panel-header-row"><span>Expense categories</span></div>
+                {categories.length ? (
+                  <div className="category-list">
+                    {categories.map((category) => (
+                      <div className="category-row" key={category.category_id ?? category.category_name}>
+                        <div className="category-row-label">
+                          <span>{category.category_name}</span>
+                          <strong>{formatMoney(category.total)}</strong>
+                        </div>
+                        <div className="category-track">
+                          <span style={{ width: `${Math.min(100, Number(category.percentage))}%` }} />
+                        </div>
+                        <small>{category.percentage}% of expenses</small>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="dashboard-empty">Categories will appear here when you record an expense.</p>
+                )}
+              </article>
+            </aside>
           </section>
         </>
       )}

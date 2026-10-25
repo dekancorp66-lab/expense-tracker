@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Plus, Trash2 } from 'lucide-react'
 import { budgetsAPI, categoriesAPI } from '../api/client'
+import './DataPages.css'
 
 function formatMoney(n) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(n) || 0)
@@ -70,27 +72,31 @@ export default function Budgets() {
   }
 
   return (
-    <div>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <h2 style={{ fontSize: '1.5rem' }}>Budgets</h2>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <select value={month} onChange={(e) => setMonth(parseInt(e.target.value))} style={{ padding: '0.5rem', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }}>
+    <main className="budget-page">
+      <header className="page-heading">
+        <div>
+          <p className="page-eyebrow">PLAN WITH PURPOSE</p>
+          <h1>Budgets</h1>
+          <p className="page-description">Set monthly limits and keep spending on track.</p>
+        </div>
+        <div className="period-controls">
+          <select aria-label="Budget month" value={month} onChange={(e) => setMonth(parseInt(e.target.value))}>
             {Array.from({ length: 12 }, (_, i) => <option key={i + 1} value={i + 1}>{new Date(2000, i).toLocaleString('default', { month: 'long' })}</option>)}
           </select>
-          <select value={year} onChange={(e) => setYear(parseInt(e.target.value))} style={{ padding: '0.5rem', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }}>
+          <select aria-label="Budget year" value={year} onChange={(e) => setYear(parseInt(e.target.value))}>
             {[year - 1, year, year + 1].map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
-          <button className="btn btn-primary" onClick={() => setShowForm(true)}>+ Set Budget</button>
+          <button className="btn btn-primary" onClick={() => setShowForm(true)}><Plus size={17} /> Set budget</button>
         </div>
-      </div>
+      </header>
 
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
       {showForm && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '1rem' }}>
-          <div className="card" onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 400 }}>
-            <h3 style={{ marginBottom: '1rem' }}>New Budget</h3>
+        <div className="modal-overlay" onClick={() => setShowForm(false)}>
+          <div className="modal card" onClick={(e) => e.stopPropagation()}>
+            <h3>New budget</h3>
             <form onSubmit={handleCreate}>
               <div className="form-group">
                 <label>Category</label>
@@ -103,7 +109,7 @@ export default function Budgets() {
                 <label>Amount</label>
                 <input type="number" step="0.01" min="0.01" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} required />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-row">
                 <div className="form-group">
                   <label>Month</label>
                   <select value={form.month} onChange={(e) => setForm({ ...form, month: parseInt(e.target.value) })}>
@@ -115,7 +121,7 @@ export default function Budgets() {
                   <input type="number" value={form.year} onChange={(e) => setForm({ ...form, year: parseInt(e.target.value) })} />
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
+              <div className="modal-actions">
                 <button type="button" className="btn btn-ghost" onClick={() => setShowForm(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary" disabled={submitting}>{submitting ? 'Saving...' : 'Save'}</button>
               </div>
@@ -130,36 +136,38 @@ export default function Budgets() {
         <div className="empty-state card">
           <h3>No budgets set</h3>
           <p>Set monthly category budgets to track spending limits.</p>
-          <button className="btn btn-primary" onClick={() => setShowForm(true)} style={{ marginTop: '1rem' }}>Set budget</button>
+          <button className="btn btn-primary" onClick={() => setShowForm(true)}><Plus size={17} /> Set budget</button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gap: '1rem' }}>
+        <div className="budget-grid">
           {progress.map((b) => (
-            <div key={b.budget_id} className="card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                <strong>{b.category_name}</strong>
-                <span className={`badge badge-${b.status}`}>{b.status} · {b.percentage}%</span>
+            <article key={b.budget_id} className="budget-card card">
+              <div className="budget-card-top">
+                <strong className="budget-card-title">{b.category_name}</strong>
+                <span className={`budget-status ${b.status}`}>{b.status} · {Math.round(b.percentage)}%</span>
               </div>
-              <div className="progress-bar">
-                <div className={`progress-fill progress-${b.status}`} style={{ width: `${Math.min(b.percentage, 100)}%` }} />
+              <div className="budget-progress-track" aria-label={`${b.percentage}% of budget used`}>
+                <div className={`budget-progress-fill ${b.status}`} style={{ width: `${Math.min(Math.max(b.percentage, 0), 100)}%` }} />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+              <div className="budget-card-bottom">
                 <span>Spent {formatMoney(b.spent)} of {formatMoney(b.budget_amount)}</span>
                 <span>{formatMoney(b.remaining)} remaining</span>
               </div>
               {b.status === 'exceeded' && (
-                <div className="alert alert-error" style={{ marginTop: '0.75rem', marginBottom: 0 }}>⚠️ Budget exceeded!</div>
+                <div className="alert alert-error budget-alert">Budget exceeded</div>
               )}
               {b.status === 'approaching' && (
-                <div className="alert" style={{ marginTop: '0.75rem', marginBottom: 0, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', color: '#fcd34d' }}>
+                <div className="budget-alert approaching-alert">
                   Approaching limit
                 </div>
               )}
-              <button className="btn btn-ghost btn-sm" style={{ marginTop: '0.75rem', color: 'var(--danger)' }} onClick={() => handleDelete(b.budget_id)}>Delete</button>
-            </div>
+              <div className="budget-card-actions">
+                <button className="budget-delete" onClick={() => handleDelete(b.budget_id)}><Trash2 size={15} /> Delete budget</button>
+              </div>
+            </article>
           ))}
         </div>
       )}
-    </div>
+    </main>
   )
 }
