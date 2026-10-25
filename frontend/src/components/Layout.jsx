@@ -4,10 +4,10 @@ import { useAuth } from '../context/AuthContext'
 import './Layout.css'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: '📊' },
-  { to: '/transactions', label: 'Transactions', icon: '💳' },
-  { to: '/budgets', label: 'Budgets', icon: '🎯' },
-  { to: '/reports', label: 'Reports', icon: '📈' },
+  { to: '/', label: 'Dashboard', icon: '◫' },
+  { to: '/transactions', label: 'Payments', icon: '◧' },
+  { to: '/budgets', label: 'Transactions', icon: '◩' },
+  { to: '/reports', label: 'Reports', icon: '◭' },
 ]
 
 export default function Layout() {
@@ -24,10 +24,18 @@ export default function Layout() {
     <div className="layout">
       <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <span className="logo">💰 ExpenseTracker</span>
+          <div className="brand-wrap">
+            <div className="brand-mark">
+              <span />
+              <span />
+              <span />
+            </div>
+            <span className="brand-name">COINEST</span>
+          </div>
           <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button>
         </div>
-        <nav className="sidebar-nav">
+
+        <nav className="sidebar-nav" aria-label="Sidebar navigation">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -37,29 +45,46 @@ export default function Layout() {
               onClick={() => setMenuOpen(false)}
             >
               <span className="nav-icon">{item.icon}</span>
-              {item.label}
+              <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
+
         <div className="sidebar-footer">
-          <div className="user-info">
-            <div className="user-avatar">{(user?.full_name || user?.username || 'U')[0].toUpperCase()}</div>
-            <div>
-              <div className="user-name">{user?.full_name || user?.username}</div>
-              <div className="user-email">{user?.email}</div>
+          <div className="promo-card">
+            <div className="promo-icon">◎</div>
+            <div className="promo-text">
+              <strong>Get Pro</strong>
+              <span>Unlock finance insights and analytics</span>
             </div>
           </div>
-          <button className="btn btn-ghost btn-sm" onClick={handleLogout} style={{ width: '100%', marginTop: '0.75rem' }}>
-            Logout
-          </button>
+          <button className="logout-button" onClick={handleLogout}>Get Pro</button>
         </div>
       </aside>
+
       {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)} />}
+
       <main className="main-content">
         <header className="topbar">
           <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Open menu">☰</button>
-          <h1 className="page-title">Expense Tracker</h1>
+
+          <div className="toolbar-search">
+            <span className="search-icon">⌕</span>
+            <input type="text" value="Search placeholder" readOnly aria-label="Search" />
+          </div>
+
+          <div className="toolbar-actions">
+            <button className="toolbar-btn" aria-label="Search">⌕</button>
+            <button className="toolbar-btn" aria-label="Notifications">◌</button>
+            <button className="toolbar-btn" aria-label="Profile">◉</button>
+          </div>
+
+          <div className="profile-pill">
+            <div className="profile-avatar">{(user?.full_name || user?.username || 'A')[0].toUpperCase()}</div>
+            <div className="profile-name">{user?.full_name || 'Andrew Forbist'}</div>
+          </div>
         </header>
+
         <div className="page-content">
           <Outlet />
         </div>
