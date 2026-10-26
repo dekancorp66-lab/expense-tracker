@@ -1,23 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 :root {
-  --bg-page: #303831;
-  --bg-panel: rgba(245, 243, 233, 0.76);
-  --bg-panel-strong: rgba(249, 247, 239, 0.9);
-  --bg-sidebar: rgba(24, 31, 28, 0.88);
-  --surface: rgba(249, 247, 239, 0.84);
-  --surface-2: rgba(226, 231, 218, 0.72);
-  --line: rgba(255, 255, 255, 0.38);
-  --text: #202a25;
-  --text-soft: #66736b;
-  --text-faint: #879187;
-  --green-dark: #246d55;
-  --green-mid: #89b99a;
-  --green-soft: #dce9dc;
-  --green-soft-2: #c6dfcc;
-  --green-accent: #3e946d;
-  --green-strong: #285d49;
-  --shadow: 0 18px 44px rgba(20, 28, 23, 0.14);
-  --radius: 16px;
-  --font: 'Aptos', 'Segoe UI', sans-serif;
+  --bg-page: #f3f4f6;
+  --bg-panel: #ffffff;
+  --bg-panel-strong: #ffffff;
+  --bg-sidebar: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --line: #e9eaed;
+  --text: #17191d;
+  --text-soft: #737781;
+  --text-faint: #a0a3aa;
+  --green-dark: #21845d;
+  --green-mid: #63b68a;
+  --green-soft: #e7f4ec;
+  --green-soft-2: #d7efe1;
+  --green-accent: #2a9a68;
+  --green-strong: #146843;
+  --red: #e4514b;
+  --blue: #5368d5;
+  --shadow: 0 2px 12px rgba(25, 32, 45, 0.045);
+  --radius: 8px;
+  --font: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 *, *::before, *::after {
@@ -34,11 +38,6 @@ body {
   margin: 0;
   font-family: var(--font);
   background-color: var(--bg-page);
-  background-image:
-    radial-gradient(ellipse at 78% 18%, rgba(188, 146, 91, 0.42), transparent 38%),
-    radial-gradient(ellipse at 18% 74%, rgba(99, 127, 100, 0.5), transparent 44%),
-    linear-gradient(125deg, #2d3631 0%, #535344 48%, #343c36 100%);
-  background-attachment: fixed;
   color: var(--text);
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
@@ -69,11 +68,10 @@ a {
 }
 
 .card {
-  background: rgba(246, 244, 235, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(22px) saturate(1.1);
 }
 
 .loading,

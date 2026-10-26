@@ -899,6 +899,236 @@
   font-size: 1.45rem;
 }
 
+.dashboard-page {
+  gap: 1rem;
+}
+
+.dashboard-heading {
+  min-height: 78px;
+  align-items: center;
+  padding: 0.25rem 0 0.5rem;
+}
+
+.dashboard-heading h1 {
+  color: #17191d;
+  font-family: 'Space Grotesk', var(--font);
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.dashboard-heading p {
+  color: #777b83;
+  font-size: 0.8rem;
+}
+
+.dashboard-heading .dashboard-eyebrow {
+  margin-bottom: 0.25rem;
+  color: #91949b;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.dashboard-add-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.62rem 0.82rem;
+  border: 1px solid #17191d;
+  border-radius: 6px;
+  color: #fff;
+  background: #17191d;
+  font-size: 0.75rem;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.dashboard-add-link:hover {
+  background: #34373d;
+  transform: translateY(-1px);
+}
+
+.dashboard-content {
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 0.92fr);
+  gap: 0.8rem;
+}
+
+.dashboard-main-column,
+.dashboard-side-column {
+  gap: 0.8rem;
+}
+
+.dashboard-panel {
+  padding: 1rem;
+  border-color: #e8e9ec;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(25, 32, 45, 0.035);
+}
+
+.dashboard-panel .panel-header-row {
+  margin-bottom: 0.75rem;
+  font-size: 0.83rem;
+}
+
+.panel-header-row span:first-child {
+  font-size: 0.86rem;
+}
+
+.panel-header-row a,
+.dashboard-empty a {
+  color: #5368d5;
+  font-size: 0.72rem;
+}
+
+.label-muted {
+  color: #9699a0;
+  font-size: 0.68rem;
+}
+
+.dashboard-chart {
+  width: 100%;
+  height: 248px;
+}
+
+.chart-legend {
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 0.3rem;
+  font-size: 0.68rem;
+}
+
+.chart-legend i {
+  width: 7px;
+  height: 7px;
+}
+
+.income-dot {
+  background: #5368d5;
+}
+
+.expense-dot {
+  background: #e4514b;
+}
+
+.dashboard-panel .table-wrap {
+  margin: 0 -0.3rem;
+}
+
+.dashboard-panel .table-wrap table {
+  font-size: 0.73rem;
+}
+
+.dashboard-panel .table-wrap th {
+  padding: 0.55rem 0.4rem;
+  color: #9599a1;
+  font-size: 0.61rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.dashboard-panel .table-wrap td {
+  padding: 0.62rem 0.4rem;
+  border-color: #f0f1f3;
+  color: #4f535b;
+}
+
+.dashboard-panel .table-wrap tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.dashboard-income {
+  color: #21845d !important;
+}
+
+.dashboard-expense {
+  color: #e4514b !important;
+}
+
+.category-list {
+  gap: 1rem;
+}
+
+.category-row-label {
+  margin-bottom: 0.38rem;
+  color: #555961;
+  font-size: 0.72rem;
+}
+
+.category-row-label strong {
+  color: #202329;
+  font-size: 0.7rem;
+}
+
+.category-track {
+  height: 5px;
+  background: #f0f1f3;
+}
+
+.category-track span {
+  background: #5368d5;
+}
+
+.budget-row .category-track span {
+  background: #22252b;
+}
+
+.category-row small {
+  color: #9699a0;
+  font-size: 0.65rem;
+}
+
+.dashboard-empty {
+  color: #858991;
+  font-size: 0.76rem;
+}
+
+@media (max-width: 960px) {
+  .dashboard-content {
+    grid-template-columns: minmax(0, 1.5fr) minmax(230px, 0.9fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard-heading {
+    min-height: 0;
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-chart {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-heading h1 {
+    font-size: 1.25rem;
+  }
+
+  .dashboard-heading p:not(.dashboard-eyebrow) {
+    max-width: 230px;
+    font-size: 0.72rem;
+  }
+
+  .dashboard-add-link {
+    padding: 0.55rem;
+    font-size: 0;
+  }
+
+  .dashboard-add-link svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .dashboard-panel {
+    padding: 0.8rem;
+  }
+}
+
 .summary-card > i {
   position: absolute;
   right: 0.9rem;
@@ -1037,5 +1267,274 @@
 
   .summary-card strong {
     font-size: 1.25rem;
+  }
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: row;
+  align-items: stretch;
+  gap: 0.8rem;
+}
+
+.dashboard-panel {
+  min-width: 0;
+  height: 100%;
+  padding: 0.9rem;
+}
+
+.cashflow-panel {
+  grid-column: 1 / span 8;
+  grid-row: 1;
+  min-height: 278px;
+}
+
+.snapshot-panel {
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  min-height: 278px;
+}
+
+.transactions-panel {
+  grid-column: 1 / span 4;
+  grid-row: 2;
+}
+
+.budgets-panel {
+  grid-column: 5 / span 4;
+  grid-row: 2;
+}
+
+.categories-panel {
+  grid-column: 9 / span 4;
+  grid-row: 2;
+}
+
+.cashflow-header {
+  align-items: center;
+  margin-bottom: 0.55rem;
+}
+
+.cashflow-heading .dashboard-eyebrow {
+  margin: 0 0 0.15rem;
+  color: #92959d;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.cashflow-heading h1 {
+  color: #17191d;
+  font-family: 'Space Grotesk', var(--font);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.cashflow-heading small {
+  margin-top: 0.15rem;
+  color: #8b8f97;
+  font-size: 0.65rem;
+}
+
+.cashflow-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.cashflow-panel-actions .dashboard-add-link {
+  padding: 0.42rem 0.58rem;
+  font-size: 0.65rem;
+}
+
+.dashboard-chart {
+  height: 174px;
+}
+
+.dashboard-chart-empty {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 174px;
+  overflow: hidden;
+  border-bottom: 1px solid #eef0f2;
+  color: #858991;
+  font-size: 0.7rem;
+}
+
+.chart-empty-mark {
+  position: absolute;
+  inset: 15% 0 10%;
+  opacity: 0.75;
+  background: repeating-linear-gradient(to bottom, transparent 0 37px, #f0f1f4 38px 39px);
+}
+
+.dashboard-chart-empty p {
+  position: relative;
+  padding: 0.4rem 0.7rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.snapshot-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.35rem 0 0.8rem;
+  border-bottom: 1px solid #eceef1;
+}
+
+.snapshot-balance small,
+.snapshot-metrics span {
+  color: #858991;
+  font-size: 0.67rem;
+}
+
+.snapshot-balance strong {
+  color: #202329;
+  font-family: 'Space Grotesk', var(--font);
+  font-size: 1.65rem;
+}
+
+.snapshot-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  padding-top: 0.8rem;
+}
+
+.snapshot-metrics div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.snapshot-metrics strong {
+  overflow: hidden;
+  color: #34373d;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+}
+
+.recent-activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-activity-item {
+  display: grid;
+  grid-template-columns: 29px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.recent-activity-item:last-child {
+  border-bottom: 0;
+}
+
+.activity-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #555961;
+  background: #f0f1f3;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.activity-mark.income {
+  color: #21845d;
+  background: #e8f5ed;
+}
+
+.activity-mark.expense {
+  color: #dc514b;
+  background: #fff0ef;
+}
+
+.activity-description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.activity-description strong,
+.recent-activity-item > strong {
+  overflow: hidden;
+  color: #34373d;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-description small {
+  overflow: hidden;
+  color: #92959d;
+  font-size: 0.59rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.snapshot-panel .panel-header-row,
+.transactions-panel .panel-header-row,
+.budgets-panel .panel-header-row,
+.categories-panel .panel-header-row {
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid #eceef1;
+}
+
+@media (max-width: 900px) {
+  .cashflow-panel {
+    grid-column: 1 / span 7;
+  }
+
+  .snapshot-panel {
+    grid-column: 8 / span 5;
+  }
+
+  .transactions-panel,
+  .budgets-panel,
+  .categories-panel {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 680px) {
+  .cashflow-panel,
+  .snapshot-panel,
+  .transactions-panel,
+  .budgets-panel,
+  .categories-panel {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .cashflow-panel,
+  .snapshot-panel {
+    min-height: 0;
+  }
+
+  .dashboard-chart,
+  .dashboard-chart-empty {
+    height: 190px;
+  }
+
+  .cashflow-header {
+    align-items: flex-start;
+  }
+
+  .cashflow-panel-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+  }
+
+  .cashflow-panel-actions .label-muted {
+    font-size: 0.58rem;
   }
 }
