@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 from functools import lru_cache
 import os
 
@@ -20,6 +21,20 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
+    # Render (and Heroku) hand out "postgres://..." URLs, but SQLAlchemy 2.x only
+    # understands "postgresql://", so we normalise it here instead of asking
+    # the user to edit the env var by hand.
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def fix_db_url(cls, v: str) -> str:
+        if v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql+psycopg2://", 1)
+        elif v.startswith("postgresql://"):
+            v = v.replace("postgresql://", "postgresql+psycopg2://", 1)
+        return v
+
+    # Lets you set CORS_ORIGINS on Render as a JSON list, e.g.
+    # ["https://your-app.vercel.app"], without touching code.
     class Config:
         env_file = ".env"
         case_sensitive = True
